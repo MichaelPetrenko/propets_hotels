@@ -1,5 +1,7 @@
 package telran.propets.hotels.api;
 
+import telran.propets.hotels.entities.HotelEntity;
+
 public class HotelDto {
 
 	public String userName;
@@ -30,85 +32,20 @@ public class HotelDto {
 		this.images = images;
 	}
 	
-
-	public String getUserName() {
-		return userName;
-	}
-
-	public String getAvatar() {
-		return avatar;
-	}
-
-	public String getPost_header() {
-		return post_header;
-	}
-
-	public String getText() {
-		return text;
-	}
-
-	public String getPhone() {
-		return phone;
-	}
-
-	public double getMin_price() {
-		return min_price;
-	}
-
-	public double getMax_price() {
-		return max_price;
-	}
-
-	public Address getAddress() {
-		return address;
-	}
-
-	public LocationDto getLocation() {
-		return location;
-	}
-
-	public String getImages() {
-		return images;
-	}
-
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
-
-	public void setAvatar(String avatar) {
-		this.avatar = avatar;
-	}
-
-	public void setPost_header(String post_header) {
-		this.post_header = post_header;
-	}
-
-	public void setText(String text) {
-		this.text = text;
-	}
-
-	public void setPhone(String phone) {
-		this.phone = phone;
-	}
-
-	public void setMin_price(double min_price) {
-		this.min_price = min_price;
-	}
-
-	public void setMax_price(double max_price) {
-		this.max_price = max_price;
-	}
-
-	public void setAddress(Address address) {
-		this.address = address;
-	}
-
-	public void setLocation(LocationDto location) {
-		this.location = location;
-	}
-
-	public void setImages(String images) {
-		this.images = images;
+	public HotelDto(HotelEntity ent) {
+		this.userName = ent.getUserName();
+		this.avatar = ent.getAvatar();
+		this.post_header = ent.getPost_header();
+		this.text = ent.getText();
+		this.phone = ent.getPhone();
+		this.min_price = ent.getMin_price();
+		this.max_price = ent.getMax_price();
+		this.address = ent.getAddress();
+		this.images = ent.getImages();
+		
+		double[] location_array = ent.getLocation();
+		LocationDto locationDto = new LocationDto(location_array[0], location_array[1]);
+		this.location = locationDto;
 	}
 	
 }

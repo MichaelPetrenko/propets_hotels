@@ -27,15 +27,15 @@ public class HotelEntity {
 	public HotelEntity() {}
 	
 	public HotelEntity(HotelDto dto) {
-		this.userName = dto.getUserName();
-		this.avatar = dto.getAvatar();
-		this.post_header = dto.getPost_header();
-		this.text = dto.getText();
-		this.phone = dto.getPhone();
-		this.min_price = dto.getMin_price();
-		this.max_price = dto.getMax_price();
-		this.address = dto.getAddress();
-		this.images = dto.getImages();
+		this.userName = dto.userName;
+		this.avatar = dto.avatar;
+		this.post_header = dto.post_header;
+		this.text = dto.text;
+		this.phone = dto.phone;
+		this.min_price = dto.min_price;
+		this.max_price = dto.max_price;
+		this.address = dto.address;
+		this.images = dto.images;
 		double[] res = new double[2];
 		res[0] = dto.location.longitude;
 		res[1] = dto.location.latitude;

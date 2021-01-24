@@ -1,9 +1,14 @@
 package telran.propets.hotels.service.impl;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -32,23 +37,22 @@ public class HotelsManagementMongo implements HotelsManagement {
 
 	@Autowired
 	HotelsRepository repo;
-	
+
 	@Autowired
 	RestTemplate restTemplate;
-	
-	
+
 	@Override
 	public HotelDto createHotel(HotelDto dto, String userLogin, String xToken) {
-		if(dto == null) {
+		if (dto == null) {
 			throw new NoContentException("DTO not exists!");
 		}
-		if(userLogin==null) {
+		if (userLogin == null) {
 			throw new NoContentException("User login not exists!");
 		}
-		
+
 		HotelEntity entity = new HotelEntity(dto);
 		repo.save(entity);
-		
+
 		String id = entity.getId();
 
 		try {
@@ -68,43 +72,102 @@ public class HotelsManagementMongo implements HotelsManagement {
 
 	@Override
 	public HotelDto updateHotel(HotelDto dto, String id) {
-		if(dto == null || id == null) {
+		if (dto == null || id == null) {
 			throw new NoContentException();
 		}
-		
-		return null;
+
+		HotelEntity entity = repo.findById(id).orElse(null);
+		if (entity == null) {
+			throw new NotExistsException();
+		}
+
+		entity.setAddress(dto.address);
+		entity.setAvatar(dto.avatar);
+		entity.setImages(dto.images);
+		double[] res = new double[2];
+		res[0] = dto.location.longitude;
+		res[1] = dto.location.latitude;
+		entity.setLocation(res);
+		entity.setMax_price(dto.max_price);
+		entity.setMin_price(dto.min_price);
+		entity.setPhone(dto.phone);
+		entity.setPost_header(dto.post_header);
+		entity.setText(dto.text);
+		entity.setUserName(dto.userName);
+		repo.save(entity);
+		return dto;
 	}
 
 	@Override
-	public HotelDto deleteHotel(String id, String xToken) {
-		// TODO Auto-generated method stub
-		return null;
+	public HotelDto deleteHotel(String id, String userLogin, String xToken) {
+		if (id == null || xToken == null) {
+			throw new NoContentException();
+		}
+		HotelEntity hotel = repo.findById(id).orElse(null);
+		if (hotel == null) {
+			throw new NotExistsException();
+		}
+		//
+		try {
+			removePostFromActivites(userLogin, id, xToken);
+		} catch (Exception e) {
+			e.getStackTrace();
+			if (e instanceof Forbidden) {
+				throw new ForbiddenException();
+			} else if (e instanceof Unauthorized) {
+				throw new BadTokenException();
+			} else if (e instanceof BadRequest) {
+				throw new BadRequestException();
+			} else
+				throw new NotExistsException();
+		}
+		repo.deleteById(id);
+		return new HotelDto(hotel);
 	}
 
 	@Override
 	public HotelDto getHotelById(String id) {
-		// TODO Auto-generated method stub
-		return null;
+		if (id == null) {
+			throw new NotExistsException();
+		}
+		HotelEntity ent = repo.findById(id).orElse(null);
+		if (ent == null) {
+			throw new NotExistsException();
+		}
+
+		return new HotelDto(ent);
 	}
 
 	@Override
-	public ResponcePageableDto viewPostPageable(int items, int currentPage) {
-		// TODO Auto-generated method stub
-		return null;
+	public ResponcePageableDto viewHotelsPageable(int items, int currentPage) {
+		Pageable pageable = PageRequest.of(currentPage, items);
+//		repo.findAll(pageable);
+		int itemsTotal = repo.findAll(pageable).getNumberOfElements();
+		List<HotelEntity> hotelsList = repo.findAll(pageable).toList();
+
+		List<HotelDto> res = hotelsList.stream().map(hotel -> new HotelDto(hotel)).collect(Collectors.toList());
+
+		ResponcePageableDto pDto = new ResponcePageableDto(items, currentPage, itemsTotal, res);
+		return pDto;
 	}
 
 	@Override
 	public Object[] getUserData(String[] listID) {
-		// TODO Auto-generated method stub
-		return null;
+		List<HotelDto> list = new ArrayList<>();
+		for (int i = 0; i < listID.length; i++) {
+			HotelEntity entity = repo.findById(listID[i]).orElse(null);
+			if (entity != null) {
+				HotelDto dto = new HotelDto(entity);
+				list.add(dto);
+			}
+		}
+		return list.toArray();
 	}
-	
+
+	// CUSTOM
+
 	private void addPostToActivites(String userLogin, String xToken, String hotelID) {
-		String endpointAddActivity = 
-				"https://propets-me.herokuapp.com/" 
-				+ "en/v1/" 
-				+ userLogin 
-				+ "/activity/"
+		String endpointAddActivity = "https://propets-me.herokuapp.com/" + "en/v1/" + userLogin + "/activity/"
 				+ hotelID;
 
 		URI uri;
@@ -124,6 +187,30 @@ public class HotelsManagementMongo implements HotelsManagement {
 		HttpEntity<Void> request = new HttpEntity<>(headers);
 		@SuppressWarnings("unused")
 		ResponseEntity<Void> responceFromAddUserActivity = restTemplate.exchange(uri, HttpMethod.PUT, request,
+				Void.class);
+
+	}
+
+	private void removePostFromActivites(String userLogin, String id, String xToken) {
+		String endpointRemoveActivity = "https://propets-me.herokuapp.com/" + "en/v1/" + userLogin + "/activity/" + id;
+
+		URI uri;
+		try {
+			uri = new URI(endpointRemoveActivity);
+		} catch (Exception e) {
+			System.out.println("Error URI");
+			throw new BadURIException();
+		}
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+		headers.set("X-Token", xToken);
+		headers.set("X-ServiceName", "hotels");
+
+		HttpEntity<Void> request = new HttpEntity<>(headers);
+		@SuppressWarnings("unused")
+		ResponseEntity<Void> responceFromAddUserActivity = restTemplate.exchange(uri, HttpMethod.DELETE, request,
 				Void.class);
 
 	}
