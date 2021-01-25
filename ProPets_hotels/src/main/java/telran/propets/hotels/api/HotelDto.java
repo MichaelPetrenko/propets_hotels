@@ -13,12 +13,12 @@ public class HotelDto {
 	public double max_price;
 	public Address address;
 	public LocationDto location;
-	public String images;
+	public String[] images;
 	
 	public HotelDto() {}
 
 	public HotelDto(String userName, String avatar, String post_header, String text, String phone, double min_price,
-			double max_price, Address address, LocationDto location, String images) {
+			double max_price, Address address, LocationDto location, String[] images) {
 		super();
 		this.userName = userName;
 		this.avatar = avatar;

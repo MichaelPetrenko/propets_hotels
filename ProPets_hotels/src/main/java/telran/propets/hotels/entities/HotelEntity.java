@@ -22,7 +22,7 @@ public class HotelEntity {
 	Address address;
 	@GeoSpatialIndexed(name = "Location")
 	double[] location;
-	String images;
+	String[] images;
 	
 	public HotelEntity() {}
 	
@@ -43,7 +43,7 @@ public class HotelEntity {
 	}
 
 	public HotelEntity(String userName, String avatar, String post_header, String text, String phone, double min_price,
-			double max_price, Address address, double[] location, String images) {
+			double max_price, Address address, double[] location, String[] images) {
 		super();
 		this.userName = userName;
 		this.avatar = avatar;
@@ -97,7 +97,7 @@ public class HotelEntity {
 		return location;
 	}
 
-	public String getImages() {
+	public String[] getImages() {
 		return images;
 	}
 
@@ -137,7 +137,7 @@ public class HotelEntity {
 		this.location = location;
 	}
 
-	public void setImages(String images) {
+	public void setImages(String[] images) {
 		this.images = images;
 	}
 	
