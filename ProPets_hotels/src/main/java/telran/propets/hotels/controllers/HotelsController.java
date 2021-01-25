@@ -21,15 +21,14 @@ import telran.propets.hotels.service.interfaces.HotelsManagement;
 @RestController
 public class HotelsController {
 
-	
 	@Autowired
 	HotelsRepository repo;
 	
 	@Autowired
 	HotelsManagement hotels;
 	
-	@Autowired
-	TokenValidationRequestor tvr;
+//	@Autowired
+//	TokenValidationRequestor tvr;
 	
 	@GetMapping(value = HotelsApiConstants.GET_HOTEL_BY_ID)
 	HotelDto getHotelById(@PathVariable String idPost) {
@@ -52,7 +51,8 @@ public class HotelsController {
 	@DeleteMapping(value = HotelsApiConstants.DELETE_HOTEL)
 	HotelDto deleteHotel(@PathVariable("id") String id, HttpServletRequest request) {
 		String xToken = request.getHeader("X-Token");
-		String userLogin = tvr.decompileToken(xToken)[0];
+//		String userLogin = tvr.decompileToken(xToken)[0];
+		String userLogin = "";
 		return hotels.deleteHotel(id, userLogin, xToken);
 	}
 	
