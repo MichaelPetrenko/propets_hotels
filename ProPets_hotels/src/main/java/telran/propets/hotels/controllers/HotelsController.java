@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,6 +16,7 @@ import telran.propets.hotels.api.HotelDto;
 import telran.propets.hotels.api.HotelsApiConstants;
 import telran.propets.hotels.api.ResponcePageableDto;
 import telran.propets.hotels.dao.HotelsRepository;
+import telran.propets.hotels.service.TokenValidationRequestor;
 import telran.propets.hotels.service.interfaces.HotelsManagement;
 
 @RestController
@@ -28,6 +30,7 @@ public class HotelsController {
 	
 //	@Autowired
 //	TokenValidationRequestor tvr;
+	TokenValidationRequestor tvr = new TokenValidationRequestor();
 	
 	@GetMapping(value = HotelsApiConstants.GET_HOTEL_BY_ID)
 	HotelDto getHotelById(@PathVariable String idPost) {
@@ -42,7 +45,7 @@ public class HotelsController {
 		return hotels.createHotel(dto, userLogin, xToken);
 	}
 	
-	@PostMapping(value = HotelsApiConstants.UPDATE_HOTEL)
+	@PutMapping(value = HotelsApiConstants.UPDATE_HOTEL)
 	HotelDto updateHotel(@RequestBody HotelDto dto, @PathVariable("id") String id) {
 		return hotels.updateHotel(dto, id);
 	}
@@ -50,19 +53,19 @@ public class HotelsController {
 	@DeleteMapping(value = HotelsApiConstants.DELETE_HOTEL)
 	HotelDto deleteHotel(@PathVariable("id") String id, HttpServletRequest request) {
 		String xToken = request.getHeader("X-Token");
-//		String userLogin = tvr.decompileToken(xToken)[0];
-		String userLogin = "";
+		String userLogin = tvr.decompileToken(xToken)[0];
+//		String userLogin = "";
 		return hotels.deleteHotel(id, userLogin, xToken);
 	}
 	
 	@GetMapping(value = HotelsApiConstants.UPDATE_HOTEL)
-	ResponcePageableDto viewHotelsPageable(@RequestParam("items") int items, @RequestParam("currentPage") int currentPage) {
+	ResponcePageableDto viewHotelsPageable(@RequestParam("itemsOnPage") int items, @RequestParam("currentPage") int currentPage) {
 		return hotels.viewHotelsPageable(items, currentPage);
 	}
 
 	@PostMapping(value = HotelsApiConstants.GET_USER_DATA)
 	Object[] getUserData(@RequestBody String[] listID) {
-		return getUserData(listID);
+		return hotels.getUserData(listID);
 	}
 
 	
