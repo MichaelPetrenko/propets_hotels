@@ -43,7 +43,6 @@ public class HotelsManagementMongo implements HotelsManagement {
 
 	@Override
 	public HotelDto createHotel(HotelDto dto, String userLogin, String xToken) {
-		System.out.println("Start creating hotel");
 		if (dto == null) {
 			throw new NoContentException("DTO not exists!");
 		}
@@ -57,8 +56,7 @@ public class HotelsManagementMongo implements HotelsManagement {
 		String id = entity.getId();
 
 		try {
-			System.out.println("userLogin is = = " + userLogin);
-//			addPostToActivites(userLogin, xToken, id);
+			addPostToActivites(userLogin, xToken, id);
 		} catch (Exception e) {
 			if (e instanceof Forbidden) {
 				throw new ForbiddenException();
@@ -69,7 +67,7 @@ public class HotelsManagementMongo implements HotelsManagement {
 			} else
 				throw new NotExistsException();
 		}
-		return dto;
+		return new HotelDto(entity);
 	}
 
 	@Override
@@ -97,7 +95,7 @@ public class HotelsManagementMongo implements HotelsManagement {
 		entity.setText(dto.text);
 		entity.setUserName(dto.userName);
 		repo.save(entity);
-		return dto;
+		return new HotelDto(entity);
 	}
 
 	@Override
