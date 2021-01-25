@@ -12,6 +12,7 @@ public class HotelEntity {
 	
 	@Id
 	String id;
+	String userLogin;
 	String userName;
 	String avatar;
 	String post_header;
@@ -27,6 +28,7 @@ public class HotelEntity {
 	public HotelEntity() {}
 	
 	public HotelEntity(HotelDto dto) {
+		this.userLogin = dto.userLogin;
 		this.userName = dto.userName;
 		this.avatar = dto.avatar;
 		this.post_header = dto.post_header;
@@ -42,9 +44,10 @@ public class HotelEntity {
 		this.location = res;
 	}
 
-	public HotelEntity(String userName, String avatar, String post_header, String text, String phone, double min_price,
+	public HotelEntity(String userLogin, String userName, String avatar, String post_header, String text, String phone, double min_price,
 			double max_price, Address address, double[] location, String[] images) {
 		super();
+		this.userLogin = userLogin;
 		this.userName = userName;
 		this.avatar = avatar;
 		this.post_header = post_header;
@@ -140,5 +143,15 @@ public class HotelEntity {
 	public void setImages(String[] images) {
 		this.images = images;
 	}
+
+	public String getUserLogin() {
+		return userLogin;
+	}
+
+	public void setUserLogin(String userLogin) {
+		this.userLogin = userLogin;
+	}
+	
+	
 	
 }

@@ -5,6 +5,7 @@ import telran.propets.hotels.entities.HotelEntity;
 public class HotelDto {
 
 	public String id;
+	public String userLogin;
 	public String userName;
 	public String avatar;
 	public String post_header;
@@ -18,10 +19,11 @@ public class HotelDto {
 	
 	public HotelDto() {}
 
-	public HotelDto(String id, String userName, String avatar, String post_header, String text, String phone, double min_price,
+	public HotelDto(String id, String userLogin, String userName, String avatar, String post_header, String text, String phone, double min_price,
 			double max_price, Address address, LocationDto location, String[] images) {
 		super();
 		this.id = id;
+		this.userLogin = userLogin;
 		this.userName = userName;
 		this.avatar = avatar;
 		this.post_header = post_header;
@@ -36,6 +38,7 @@ public class HotelDto {
 	
 	public HotelDto(HotelEntity ent) {
 		this.id = ent.getId();
+		this.userLogin = ent.getUserLogin();
 		this.userName = ent.getUserName();
 		this.avatar = ent.getAvatar();
 		this.post_header = ent.getPost_header();
