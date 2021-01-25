@@ -40,8 +40,6 @@ public class HotelsController {
 	@PostMapping(value = HotelsApiConstants.CREATE_HOTEL)
 	HotelDto createHotel(@RequestBody HotelDto dto, @PathVariable("login") String userLogin, HttpServletRequest request) {
 		String xToken = request.getHeader("X-Token");
-		System.out.println("1 " +xToken);
-		System.out.println("2 " +userLogin);
 		return hotels.createHotel(dto, userLogin, xToken);
 	}
 	
@@ -54,7 +52,6 @@ public class HotelsController {
 	HotelDto deleteHotel(@PathVariable("id") String id, HttpServletRequest request) {
 		String xToken = request.getHeader("X-Token");
 		String userLogin = tvr.decompileToken(xToken)[0];
-//		String userLogin = "";
 		return hotels.deleteHotel(id, userLogin, xToken);
 	}
 	
