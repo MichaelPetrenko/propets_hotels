@@ -141,7 +141,6 @@ public class HotelsManagementMongo implements HotelsManagement {
 	@Override
 	public ResponcePageableDto viewHotelsPageable(int items, int currentPage) {
 		Pageable pageable = PageRequest.of(currentPage, items);
-//		repo.findAll(pageable);
 		int itemsTotal = repo.findAll(pageable).getNumberOfElements();
 		List<HotelEntity> hotelsList = repo.findAll(pageable).toList();
 
@@ -174,7 +173,6 @@ public class HotelsManagementMongo implements HotelsManagement {
 		try {
 			uri = new URI(endpointAddActivity);
 		} catch (Exception e) {
-			System.out.println("Error URI");
 			throw new BadURIException();
 		}
 
@@ -198,7 +196,6 @@ public class HotelsManagementMongo implements HotelsManagement {
 		try {
 			uri = new URI(endpointRemoveActivity);
 		} catch (Exception e) {
-			System.out.println("Error URI");
 			throw new BadURIException();
 		}
 
