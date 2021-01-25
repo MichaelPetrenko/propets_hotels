@@ -15,7 +15,6 @@ import telran.propets.hotels.api.HotelDto;
 import telran.propets.hotels.api.HotelsApiConstants;
 import telran.propets.hotels.api.ResponcePageableDto;
 import telran.propets.hotels.dao.HotelsRepository;
-import telran.propets.hotels.service.TokenValidationRequestor;
 import telran.propets.hotels.service.interfaces.HotelsManagement;
 
 @RestController
@@ -36,7 +35,7 @@ public class HotelsController {
 	}
 	
 	@PostMapping(value = HotelsApiConstants.CREATE_HOTEL)
-	HotelDto createHotel(@RequestBody HotelDto dto, @PathVariable String userLogin, HttpServletRequest request) {
+	HotelDto createHotel(@RequestBody HotelDto dto, @PathVariable("login") String userLogin, HttpServletRequest request) {
 		String xToken = request.getHeader("X-Token");
 		System.out.println("1 " +xToken);
 		System.out.println("2 " +userLogin);
