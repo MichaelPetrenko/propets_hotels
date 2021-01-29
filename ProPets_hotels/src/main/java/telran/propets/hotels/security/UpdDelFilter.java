@@ -44,7 +44,7 @@ public class UpdDelFilter implements Filter {
 				String postId = request.getServletPath().split("/")[3];
 				HotelEntity entity = repo.findById(postId).orElse(null);
 				if(entity==null) {
-					response.sendError(401);
+					response.sendError(404);
 					return;
 				}
 				String loginEntity = entity.getUserLogin();
