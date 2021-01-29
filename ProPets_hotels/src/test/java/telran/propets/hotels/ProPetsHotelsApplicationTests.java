@@ -2,6 +2,8 @@ package telran.propets.hotels;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
+
 import org.junit.jupiter.api.*;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -68,6 +70,15 @@ class ProPetsHotelsApplicationTests {
 		HotelDto updatedHotel = hotels.updateHotel(HOTEL_DTO_CHANGED, POST_ID);
 		assertEquals(HOTEL_DTO_CHANGED.post_header, updatedHotel.post_header);
 		assertEquals(HOTEL_DTO_CHANGED.text, updatedHotel.text);
+	}
+	
+	@Test
+	void getUserDataTest() {
+		String[] arr = new String[] {POST_ID};
+		Object[] hotelsArr = hotels.getUserData(arr);
+		HotelDto hotel = (HotelDto) hotelsArr[0];
+		assertEquals(HOTEL_DTO.post_header, hotel.post_header);
+		assertEquals(HOTEL_DTO.text, hotel.text);
 	}
 	
 	@AfterAll
