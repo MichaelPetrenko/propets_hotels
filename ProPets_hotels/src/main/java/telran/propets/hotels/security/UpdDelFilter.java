@@ -59,17 +59,17 @@ public class UpdDelFilter implements Filter {
 			String[] roles;
 
 			try {
-				String strRoles = cred[3];
-				roles = strRoles.split(", ");
+				roles = cred[3].split(", ");
 			} catch (Exception e) {
 				response.sendError(403);
 				return;
 			}
 
 			String loginEntity = entity.getUserLogin();
-			if (cred[0] != loginEntity) {
+			if (!cred[0].equals(loginEntity)) {
 				if (roleCheck(roles)==false) {
 					response.sendError(403);
+					System.out.println("NE DOLZHNY BYT TYT");
 					return;
 				}
 			}
