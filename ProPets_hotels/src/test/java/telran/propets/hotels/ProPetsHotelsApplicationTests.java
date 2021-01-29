@@ -14,7 +14,7 @@ import telran.propets.hotels.api.ResponcePageableDto;
 import telran.propets.hotels.service.impl.HotelsManagementMongo;
 import telran.propets.hotels.service.interfaces.HotelsManagement;
 
-@SpringBootApplication
+//@SpringBootApplication
 class ProPetsHotelsApplicationTests {
 	
 	final static HotelDto HOTEL_DTO = new HotelDto(
