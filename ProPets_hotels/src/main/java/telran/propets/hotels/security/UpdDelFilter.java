@@ -68,11 +68,10 @@ public class UpdDelFilter implements Filter {
 
 			String loginEntity = entity.getUserLogin();
 			if (cred[0] != loginEntity) {
-				if (!roleCheck(roles)) {
+				if (roleCheck(roles)==false) {
 					response.sendError(403);
 					return;
 				}
-				;
 			}
 
 			try {
