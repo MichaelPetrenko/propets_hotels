@@ -2,8 +2,6 @@ package telran.propets.hotels;
 
 import static org.junit.Assert.*;
 
-import java.util.ArrayList;
-
 import org.junit.jupiter.api.*;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -12,6 +10,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 import telran.propets.hotels.api.Address;
 import telran.propets.hotels.api.HotelDto;
 import telran.propets.hotels.api.LocationDto;
+import telran.propets.hotels.api.ResponcePageableDto;
 import telran.propets.hotels.service.impl.HotelsManagementMongo;
 import telran.propets.hotels.service.interfaces.HotelsManagement;
 
@@ -79,6 +78,12 @@ class ProPetsHotelsApplicationTests {
 		HotelDto hotel = (HotelDto) hotelsArr[0];
 		assertEquals(HOTEL_DTO.post_header, hotel.post_header);
 		assertEquals(HOTEL_DTO.text, hotel.text);
+	}
+	
+	@Test
+	void viewPostPageableTest() {
+		ResponcePageableDto pDto = hotels.viewHotelsPageable(10, 0);
+		assertTrue(pDto.itemsTotal>0);
 	}
 	
 	@AfterAll
