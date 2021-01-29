@@ -25,8 +25,8 @@ public class BasicFilter implements Filter {
 		HttpServletResponse response = (HttpServletResponse) resp;
 		String path = request.getServletPath();
 
-		if ((path.matches("/en/v1/view/[^/]+"))
-		  || path.matches("/en/v1/id/[^/]+") && request.getMethod().equalsIgnoreCase("GET")) {
+		if (path.matches("/en/v1/view/[^/]?")
+		  || (path.matches("/en/v1/id/[^/]+") && request.getMethod().equalsIgnoreCase("GET"))) {
 
 			String xToken = request.getHeader("X-Token");
 

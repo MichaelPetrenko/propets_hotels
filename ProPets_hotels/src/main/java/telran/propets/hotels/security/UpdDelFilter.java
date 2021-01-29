@@ -69,7 +69,6 @@ public class UpdDelFilter implements Filter {
 			if (!cred[0].equals(loginEntity)) {
 				if (roleCheck(roles)==false) {
 					response.sendError(403);
-					System.out.println("NE DOLZHNY BYT TYT");
 					return;
 				}
 			}
@@ -90,8 +89,10 @@ public class UpdDelFilter implements Filter {
 
 		boolean isAdmin = false;
 		for (String role : roles) {
+			System.out.println("ROLE : "+role);
 			if (role.equalsIgnoreCase(AccountingRoles.ADMIN.name())) {
 				isAdmin = true;
+				break;
 			}
 		}
 		return isAdmin;

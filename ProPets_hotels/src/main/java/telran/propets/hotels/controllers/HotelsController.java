@@ -55,7 +55,7 @@ public class HotelsController {
 		return hotels.deleteHotel(id, userLogin, xToken);
 	}
 	
-	@GetMapping(value = HotelsApiConstants.UPDATE_HOTEL)
+	@GetMapping(value = HotelsApiConstants.VIEW_HOTELS_PAGEABLE)
 	ResponcePageableDto viewHotelsPageable(@RequestParam("itemsOnPage") int items, @RequestParam("currentPage") int currentPage) {
 		return hotels.viewHotelsPageable(items, currentPage);
 	}
